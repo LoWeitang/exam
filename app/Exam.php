@@ -20,4 +20,10 @@ class Exam extends Model
     {
         return $this->hasMany('App\Topic');
     }
+    // 一個測驗可能會有多（hasMany）考試（test）
+    public function tests()
+    {
+        return $this->hasMany('App\Test');
+    }
+
 }

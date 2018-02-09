@@ -54,6 +54,18 @@ Route::patch('/exam/{id}', 'ExamController@update')->name('exam.update');
 
 //修改題目
 Route::get('/topic/{id}/edit', 'TopicController@edit')->name('topic.edit');
+//更新題目
+Route::patch('/topic/{id}', 'TopicController@update')->name('topic.update');
+//刪除題目
+Route::delete('/topic/{id}', 'TopicController@destroy')->name('topic.destroy');
+
+//刪除測驗
+Route::delete('/exam/{id}', 'ExamController@destroy')->name('exam.destroy');
+
+//新增測驗
+Route::post('/test', 'TestController@store')->name('test.store');
+//顯示測驗結果
+Route::get('/test/{id}', 'TestController@show')->name('test.show');
 
 
 

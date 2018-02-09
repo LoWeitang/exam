@@ -117,7 +117,14 @@ class ExamController extends Controller
         //
         $exam = Exam::find($id);
         // $topics = Topic::where('exam_id', $id)->get();
-        return view('exam.show', compact('exam', 'topics'));
+        if (Auth::user()->hasPermissionTo('進行測驗')) {
+            $exam->topics = $exam->topics->random(10);
+            $user_id = Auth::id();
+            return view('exam.show', compact('exam', 'user_id'));
+        }else{
+            return view('exam.show', compact('exam', 'topics'));
+        }
+
     }
 
     /**
@@ -156,6 +163,7 @@ class ExamController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Exam::destroy($id);
+        return redirect()->route('exam.index');
     }
 }

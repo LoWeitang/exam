@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Exam;
+use App\Test;
 use App\Topic;
 
-class TopicController extends Controller
+class TestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,8 +37,21 @@ class TopicController extends Controller
     public function store(Request $request)
     {
         //
-        $topic = Topic::create($request->all());
-        return redirect()->route('exam.show', $topic->exam_id);
+        $content = json_encode($request->ans);
+        $score = 0;
+        foreach ($request->ans as $topic_id => $ans) {
+            $topic = Topic::find($topic_id);
+            $score += ($topic->ans == $ans) ? 10 : 0;
+        }
+        
+        $test = Test::create([
+            'content' => $content,
+            'user_id' => $request->user_id,
+            'exam_id' => $request->exam_id,
+            'score' => $score,
+        ]);
+        return redirect()->route('test.show', $test->id);
+
     }
 
     /**
@@ -50,6 +63,18 @@ class TopicController extends Controller
     public function show($id)
     {
         //
+        $test = Test::find($id);
+        $topics = json_decode($test->content, true);
+        $content = [];
+        $i=0;
+        foreach ($topics as $topic_id => $ans) {
+            $topic = Topic::find($topic_id);
+            $content[$i]['topic'] = $topic;
+            $content[$i]['ans'] = $ans;
+            $i++;
+        
+        }
+        return view('exam.test', compact('test', 'content'));
     }
 
     /**
@@ -61,9 +86,6 @@ class TopicController extends Controller
     public function edit($id)
     {
         //
-        $topic = Topic::find($id);
-        $exam  = Exam::find($topic->exam_id);
-        return view('exam.show', compact('topic','exam'));
     }
 
     /**
@@ -76,9 +98,6 @@ class TopicController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $topic = Topic::find($id);
-        $topic->update($request->all());
-        return redirect()->route('exam.show', $topic->exam_id);
     }
 
     /**
@@ -90,18 +109,5 @@ class TopicController extends Controller
     public function destroy($id)
     {
         //
-        //
-        $topic = Topic::find($id);
-        $topic->delete();
-
-        //靜態方法
-        // Topic::destroy($id);
-        //刪除一筆
-        // Topic::destroy(1);
-        //刪除多筆
-        // Topic::destroy([1,3,5,7]);
-        // Topic::destroy(1,3,5,7);
-
-        return redirect()->route('exam.show', $topic->exam_id);
     }
 }
