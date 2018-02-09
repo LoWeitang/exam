@@ -17,5 +17,46 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'ExamController@index')->name('index');
+Route::get('/home', 'ExamController@index')->name('home.index');
+
+
+
+// Route::get('/exam', 'ExamController@index')->name('exam.index');
+// Route::get('/exam/create', 'ExamController@create')->name('exam.create');
+// Route::post('/exam/store', 'ExamController@store')->name('exam.store');
+// Route::get('/exam/{id}', 'ExamController@show')->name('exam.show');
+// Route::get('/exam/{id}/edit', 'ExamController@edit')->name('exam.edit');
+// Route::patch('/exam/{id}', 'ExamController@update')->name('exam.update');
+// Route::delete('/exam/{id}', 'ExamController@destroy')->name('exam.destroy');
+
+//Route::resource('exam' , 'ExamController');
+// Route::get('/exam/create', function () {
+//     return view('exam.create');
+// })->name('exam.create');
+
+//Route::get('/exam/create', 'ExamController@create')->name('exam.create');
+Route::get('/exam', 'ExamController@index')->name('exam.index');
+Route::get('/exam/create', 'ExamController@create')->name('exam.create');
+Route::post('/exam', 'ExamController@store')->name('exam.store');
+Route::get('/exam/{id}', 'ExamController@show')->name('exam.show');
+//參數驗證
+//Route::get('/exam/{id}', 'ExamController@show')->name('exam.show')->where('id', '[0-9]+');
+//如果同一個參數要限制格式，且有好幾個 Route 要用，則可用 Route::pattern() 方式來統一宣告（記得放最上面）
+//Route::pattern('id' , '[0-9]+');
+
+// 建立題目
+Route::post('/topic', 'TopicController@store')->name('topic.store');
+//修改測驗
+Route::get('/exam/{id}/edit', 'ExamController@edit')->name('exam.edit');
+Route::patch('/exam/{id}', 'ExamController@update')->name('exam.update');
+
+//修改題目
+Route::get('/topic/{id}/edit', 'TopicController@edit')->name('topic.edit');
+
+
+
+
+
 
